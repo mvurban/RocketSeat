@@ -19,7 +19,7 @@ export function Welcome(){
       </Text>
       <TouchableOpacity style={styles.button} activeOpacity={0.5} >
         <Text style={styles.buttontext}>
-          >>  
+          >
         </Text>
       </TouchableOpacity>
     </View>
