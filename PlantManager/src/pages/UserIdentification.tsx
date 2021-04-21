@@ -25,7 +25,7 @@ export function UserIdentification() {
             <View style={styles.wrapper}>
                <Text style={styles.emoji}>
                   {
-                     !!userName ?  '😀' : '😁'
+                     !!userName ?  '😀' : '😁' 
                   }
                   
                </Text>
@@ -46,7 +46,7 @@ export function UserIdentification() {
                   onChangeText={handleInputChange}
                />
                <View style={styles.buttonContainer}>
-                  <Button></Button>
+                  <Button texto='Confirmar'></Button>
                </View>
 
             </View>
