@@ -1,10 +1,8 @@
 import React from 'react';
-import { Welcome } from './src/pages/Welcome';
-import { UserIdentification } from './src/pages/UserIdentification';
-import { Confirmation } from './src/pages/Confirmation';
-
 import AppLoading from  'expo-app-loading';
-import {useFonts, Jost_400Regular, Jost_600SemiBold} from '@expo-google-fonts/jost';
+import {useFonts, Jost_400Regular, Jost_600SemiBold} from '@expo-google-fonts/jost'
+
+import  Routes from './src/routes';
 
 export default function App(){
 
@@ -14,11 +12,11 @@ export default function App(){
    });
    
    if(!fontsLoaded)
-      return <AppLoading></AppLoading>
+      return <AppLoading />
 
   return(
    //  <Welcome />
    //<UserIdentification></UserIdentification>
-    <Confirmation></Confirmation>
+    <Routes />
   )
 }

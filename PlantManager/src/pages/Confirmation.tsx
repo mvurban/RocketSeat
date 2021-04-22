@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TextInput } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import { Button } from '../components/Button';
@@ -61,5 +61,4 @@ const styles = StyleSheet.create({
       width: '100%',
       marginVertical: 20,
    }
-
 })
