@@ -7,15 +7,31 @@ import fonts from '../styles/fonts'
 import { FlatList, ScrollView } from 'react-native-gesture-handler'
 import ButtonAmbiente from '../components/ButtonAmbiente'
 import api from '../services/api'
+import PlantCardPrimary from '../components/PlantCardPrimary'
 
 interface ambientesProps {
    key: string,
    title: string,
 }
 
+interface plantasProps {
+   id: string,
+   name: string,
+   about: string,
+   water_tips: string,
+   photo: string,
+   environments: [string],
+   frequency: {
+     times: number,
+     repeat_every: string,
+   }
+}
+
 export function PlantSelect() {
 
    const [ambientes, setAmbientes] = useState<ambientesProps[]>([]);
+   const [plantas, setPlantas] = useState<plantasProps[]>([]);
+   const [ambienteSelecionado, setAmbienteSelecionado] = useState('all');
 
    useEffect(() => {
       async function feachAmbientes(){
@@ -32,6 +48,19 @@ export function PlantSelect() {
       
    }, [])
 
+   useEffect(() => {      
+      async function feachPlants() {
+         const{data} = await api.get('plants?_sort=name&_order=asc');
+         setPlantas(data)
+      }
+      feachPlants();
+   }, [])
+
+   function handlerAmbienteSelecionado(AmbienteSelecionado : string){      
+      setAmbienteSelecionado(AmbienteSelecionado);
+   }
+
+
    return (
       <SafeAreaView style={styles.container}>
          <Perfil texto1='Olá,' texto2='Marcelo' avatar = ''></Perfil>
@@ -41,28 +70,29 @@ export function PlantSelect() {
          </View>
          <View style={styles.containerBotoesAmbiente}>
             <FlatList 
-               style={styles.ScrollViewBotoesAmbiente}
+               style={styles.ListaBotoesAmbiente}
                data={ambientes} 
                renderItem={({item}) => (
-                  <ButtonAmbiente titulo={item.title} onPress={()=>{}}></ButtonAmbiente>               
+                  <ButtonAmbiente 
+                     titulo={item.title} 
+                     ativo={item.key == ambienteSelecionado}  
+                     onPress={()=>{handlerAmbienteSelecionado(item.key)}} 
+                  />
                )}
                horizontal
                showsHorizontalScrollIndicator = {false}
             ></FlatList>            
-
-            {/* 
-            <ScrollView style={styles.ScrollViewBotoesAmbiente} horizontal={true} showsHorizontalScrollIndicator={false} >               
-               <ButtonAmbiente titulo='Sala' onPress={()=>{}}></ButtonAmbiente>               
-               <ButtonAmbiente titulo='Quarto' onPress={()=>{}} destaque={true}></ButtonAmbiente>               
-               <ButtonAmbiente titulo='Cozinha' onPress={()=>{}}></ButtonAmbiente>               
-               <ButtonAmbiente titulo='Banheiro' onPress={()=>{}}></ButtonAmbiente>               
-               <ButtonAmbiente titulo='Sacada' onPress={()=>{}}></ButtonAmbiente>               
-            </ScrollView>
-             */}
-         
          </View>
          <View style={styles.containerPlantas}>
-
+            <FlatList 
+               style={styles.ListaCardsPlantas}
+               data={plantas}
+               renderItem={({item}) => (
+                  <PlantCardPrimary data={item} onPress={()=>{}} ></PlantCardPrimary>
+               )}
+               showsVerticalScrollIndicator = {false}
+               numColumns={2}
+            />
          </View>
 
       </SafeAreaView>
@@ -91,10 +121,14 @@ const styles = StyleSheet.create({
    containerBotoesAmbiente:{
       marginTop:24,
    },
-   ScrollViewBotoesAmbiente:{
+   ListaBotoesAmbiente:{
       width:'100%',
    },
    containerPlantas:{
       marginTop:40,
+   },
+   ListaCardsPlantas:{
+
    }
+
 })

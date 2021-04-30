@@ -8,14 +8,14 @@ import fonts from '../styles/fonts'
 // interface buttonParans extends TouchableOpacityProps{
 interface buttonParans extends RectButtonProps{   
    titulo: string,
-   destaque?: boolean,   
+   ativo?: boolean,   
 }
 
-export default function ButtonAmbiente({titulo, destaque=false, ...rest} : buttonParans) {
+export default function ButtonAmbiente({titulo, ativo=false, ...rest} : buttonParans) {
    return (
       <View>
-         <RectButton style={[styles.botaoAmbienteComum,  destaque ? styles.botaoAmbienteDestaque : styles.botaoAmbiente]} {...rest}>
-            <Text style={destaque ? styles.botaoAmbienteTextDestaque : styles.botaoAmbienteText}>{titulo}</Text>
+         <RectButton style={[styles.botaoAmbienteComum,  ativo ? styles.botaoAmbienteDestaque : styles.botaoAmbiente]} {...rest}>
+            <Text style={ativo ? styles.botaoAmbienteTextDestaque : styles.botaoAmbienteText}>{titulo}</Text>
          </RectButton>
 {/*          
          <TouchableOpacity style={destaque ? styles.botaoAmbienteDestaque : styles.botaoAmbiente} {...rest}>
