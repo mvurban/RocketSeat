@@ -31,6 +31,7 @@ export function PlantSelect() {
 
    const [ambientes, setAmbientes] = useState<ambientesProps[]>([]);
    const [plantas, setPlantas] = useState<plantasProps[]>([]);
+   const [plantasFiltradas, setPlantasFiltradas] = useState<plantasProps[]>([]);
    const [ambienteSelecionado, setAmbienteSelecionado] = useState('all');
 
    useEffect(() => {
@@ -51,14 +52,25 @@ export function PlantSelect() {
    useEffect(() => {      
       async function feachPlants() {
          const{data} = await api.get('plants?_sort=name&_order=asc');
-         setPlantas(data)
+         setPlantas(data);
+         setPlantasFiltradas(data);         
       }
       feachPlants();
    }, [])
 
    function handlerAmbienteSelecionado(AmbienteSelecionado : string){      
       setAmbienteSelecionado(AmbienteSelecionado);
+
+      if(AmbienteSelecionado == 'all'){
+         setPlantasFiltradas(plantas);
+      }
+      else
+      {
+         const plantasFiltradas = plantas.filter(planta=>planta.environments.includes(AmbienteSelecionado))
+         setPlantasFiltradas(plantasFiltradas);
+      }
    }
+
 
 
    return (
@@ -86,7 +98,7 @@ export function PlantSelect() {
          <View style={styles.containerPlantas}>
             <FlatList 
                style={styles.ListaCardsPlantas}
-               data={plantas}
+               data={plantasFiltradas}
                renderItem={({item}) => (
                   <PlantCardPrimary data={item} onPress={()=>{}} ></PlantCardPrimary>
                )}
