@@ -10,6 +10,7 @@ import api from '../services/api'
 import PlantCardPrimary from '../components/PlantCardPrimary'
 import Loading from '../components/Loading'
 import {useScrollToTop} from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 interface ambientesProps {
    key: string,
@@ -35,10 +36,10 @@ export function PlantSelect() {
    const [plantas, setPlantas] = useState<plantasProps[]>([]);
    const [plantasFiltradas, setPlantasFiltradas] = useState<plantasProps[]>([]);
    const [ambienteSelecionado, setAmbienteSelecionado] = useState('all');
+   const [userName, setUserName] = useState('');
    const [loading, setLoading] = useState(true)
    const [page, setPage] = useState(1)
    const [loadingMore, setloadingMore] = useState(false)
-   const [loadedAll, setloadedAll] = useState(false)
    const flatListRef = createRef<FlatList<any>>();
 
    
@@ -93,13 +94,16 @@ export function PlantSelect() {
       setPage(oldValue => oldValue + 1);
       feachPlants();
    }
-    
-   useEffect(() => {
-      feachAmbientes()      
-   }, [])
 
    useEffect(() => {      
+      feachAmbientes()      
       feachPlants();
+
+      async function loadUserName() {
+         const user = await AsyncStorage.getItem('@plantmanager:userName');
+         setUserName(user || '');
+      }
+      loadUserName();
    }, [])
 
 
@@ -111,7 +115,7 @@ export function PlantSelect() {
 
    return (
       <SafeAreaView style={styles.container}>         
-         <Perfil texto1='Olá,' texto2='Marcelo' avatar = ''></Perfil>
+         <Perfil texto1='Olá,' texto2={userName} avatar = ''></Perfil>
          <View style={styles.containerTitulo}>
             <Text style={styles.titulo}>Em qual ambiente</Text>
             <Text style={styles.subTitulo}>você quer colocar sua planta?</Text>
@@ -120,6 +124,7 @@ export function PlantSelect() {
             <FlatList 
                style={styles.ListaBotoesAmbiente}
                data={ambientes} 
+               keyExtractor = {(item)=>item.key}
                renderItem={({item}) => (
                   <ButtonAmbiente 
                      titulo={item.title} 
@@ -134,6 +139,7 @@ export function PlantSelect() {
          <View style={styles.containerPlantas}>
             <FlatList                
                data={plantasFiltradas}
+               keyExtractor = {(item)=>item.key}
                renderItem={({item}) => (
                   <PlantCardPrimary data={item} onPress={()=>{}} ></PlantCardPrimary>
                )}                 

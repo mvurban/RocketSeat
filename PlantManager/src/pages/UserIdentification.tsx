@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TextInput,
-   KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+   KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import { Button } from '../components/Button';
 import { useNavigation } from '@react-navigation/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function UserIdentification() {
 
@@ -22,8 +23,12 @@ export function UserIdentification() {
       setUserName(value);
    }
 
-   function handleSubmit() {
-      navigation.navigate('Confirmation')
+   async function handleSubmit() {
+      if(!userName)
+         return Alert.alert('Me diz como chamar você 😢');
+         
+      await AsyncStorage.setItem('@plantmanager:userName',userName);
+      navigation.navigate('Confirmation');
    }
 
    return (
