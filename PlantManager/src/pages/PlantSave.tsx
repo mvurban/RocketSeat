@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
+import React, {useState} from 'react'
+import { View, Text, StyleSheet, Platform, Alert } from 'react-native'
 import {SvgFromUri} from  'react-native-svg'
 import {useRoute} from '@react-navigation/core'
 import plantasProps from '../interfaces/Plantas'
@@ -7,6 +7,9 @@ import colors from '../styles/colors'
 import fonts from '../styles/fonts'
 import CardRegagem from '../components/CardRegagem';
 import Button from '../components/Button'
+import DateTimePicker, {Event} from '@react-native-community/datetimepicker';
+import { format, isBefore } from 'date-fns'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 interface Params {
    plant: plantasProps,
@@ -16,6 +19,30 @@ export default function PlantSave() {
 
    const route = useRoute();
    const {plant}  = route.params as Params;
+
+   const [selectedDateTime, setSelecedDateTime] = useState(new Date());
+   const [showDatePicker, setShowDatePicker] = useState(Platform.OS == 'ios');
+
+   function handlerChangeTime(event : Event, dateTime:Date | undefined){      
+      setShowDatePicker(oldState => !oldState)
+
+      if(dateTime)
+         setSelecedDateTime(dateTime);      
+
+      /*
+      if(dateTime && isBefore(dateTime, new Date()) )
+      {
+         setSelecedDateTime(new Date());
+         Alert.alert('Escolha um horário no futuro! ⏱️ ')
+      }
+      else if(dateTime)
+         setSelecedDateTime(dateTime);      
+      */
+
+   }
+   function handlerOpenDatePickerAndroid(){
+      setShowDatePicker(coco => !coco)
+   }
    
    return (
       <View style={styles.container}>
@@ -32,7 +59,26 @@ export default function PlantSave() {
                <CardRegagem dica={plant.water_tips}></CardRegagem>
             </View>
             <Text style={styles.tituloHorario}>Escolha o melhor horário para ser lembrado:</Text>
-            <Text style={styles.quadroHorario}>Quadro de seleção de hora</Text>
+            <View style={styles.quadroHorario}>
+            {
+            showDatePicker &&                               
+               (
+               <DateTimePicker 
+                  value={selectedDateTime}
+                  mode='time'
+                  display='spinner'
+                  onChange={handlerChangeTime}
+               />
+               )
+            }   
+            {
+            Platform.OS == 'android' && (
+               <TouchableOpacity style={styles.botaoEscolherHorario} onPress={()=>{handlerOpenDatePickerAndroid()}}>
+                  <Text style={styles.textBotaoEscolherHorario}>{`Mudar horário ${format(selectedDateTime,'HH:mm')}`}</Text>
+               </TouchableOpacity>
+               )
+            }
+         </View>
             <Button texto='Cadastrar Planta' onPress={()=>{}}></Button>                 
          </View>
       </View>
@@ -88,5 +134,16 @@ const styles = StyleSheet.create({
       marginTop:16,
       marginBottom:50,
    },   
-
+   botaoEscolherHorario:{
+      padding:10,
+      backgroundColor:colors.white,
+      alignItems:'center',
+      justifyContent:'center',
+      borderRadius:10,
+   },
+   textBotaoEscolherHorario:{
+      fontFamily:fonts.text,
+      color:colors.body_dark,
+      fontSize:20
+   },
 })
