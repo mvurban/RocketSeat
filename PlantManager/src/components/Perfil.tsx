@@ -10,7 +10,7 @@ interface propsPerfil {
    avatar: string,
 }
 
-export function Perfil({texto1, texto2, avatar}: propsPerfil) {
+export default function Perfil({texto1, texto2, avatar}: propsPerfil) {
    return (
       <View style={styles.container}>
          <View>

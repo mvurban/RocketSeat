@@ -1,36 +1,21 @@
 
-import React, {useEffect, useState, createRef, useRef} from 'react'
-import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, FlatListProps } from 'react-native'
-import colors from '../styles/colors'
-import {Perfil} from '../components/Perfil'
+import React, {useEffect, useState, createRef} from 'react'
+import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler'
+import { useNavigation } from '@react-navigation/core';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import fonts from '../styles/fonts'
-import { FlatList, ScrollView } from 'react-native-gesture-handler'
-import ButtonAmbiente from '../components/ButtonAmbiente'
+import colors from '../styles/colors'
 import api from '../services/api'
+import Perfil from '../components/Perfil'
+import ButtonAmbiente from '../components/ButtonAmbiente'
 import PlantCardPrimary from '../components/PlantCardPrimary'
 import Loading from '../components/Loading'
-import {useScrollToTop} from '@react-navigation/native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import plantasProps from '../interfaces/Plantas'
+import ambientesProps from '../interfaces/Ambientes'
 
-interface ambientesProps {
-   key: string,
-   title: string,
-}
 
-interface plantasProps {
-   id: string,
-   name: string,
-   about: string,
-   water_tips: string,
-   photo: string,
-   environments: [string],
-   frequency: {
-     times: number,
-     repeat_every: string,
-   }
-}
-
-export function PlantSelect() {
+export default function PlantSelect() {
 
    const [ambientes, setAmbientes] = useState<ambientesProps[]>([]);
    const [plantas, setPlantas] = useState<plantasProps[]>([]);
@@ -41,6 +26,7 @@ export function PlantSelect() {
    const [page, setPage] = useState(1)
    const [loadingMore, setloadingMore] = useState(false)
    const flatListRef = createRef<FlatList<any>>();
+   const navigation = useNavigation();
 
    
    async function feachAmbientes(){
@@ -94,6 +80,10 @@ export function PlantSelect() {
       setPage(oldValue => oldValue + 1);
       feachPlants();
    }
+   function handlerPlantCard(plant:plantasProps)
+   {      
+      navigation.navigate('PlantSave', {plant});
+   }
 
    useEffect(() => {      
       feachAmbientes()      
@@ -139,9 +129,9 @@ export function PlantSelect() {
          <View style={styles.containerPlantas}>
             <FlatList                
                data={plantasFiltradas}
-               keyExtractor = {(item)=>item.key}
+               keyExtractor = {(item)=>item.id}
                renderItem={({item}) => (
-                  <PlantCardPrimary data={item} onPress={()=>{}} ></PlantCardPrimary>
+                  <PlantCardPrimary data={item} onPress={()=>handlerPlantCard(item)} ></PlantCardPrimary>
                )}                 
                ref={flatListRef}               
                showsVerticalScrollIndicator = {false}

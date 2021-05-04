@@ -6,7 +6,7 @@ import fonts from '../styles/fonts';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 
-export function Welcome() {
+export default function Welcome() {
 
    const navigation = useNavigation();
 

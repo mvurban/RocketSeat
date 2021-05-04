@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TextInput,
    KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
-import { Button } from '../components/Button';
-import { useNavigation } from '@react-navigation/core';
+import Button from '../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export function UserIdentification() {
+export default function UserIdentification() {
 
    const [isFocused, setIsFocused] = useState(false);
    const [userName, setUserName] = useState<string>();

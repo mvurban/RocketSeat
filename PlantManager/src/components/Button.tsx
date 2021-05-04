@@ -7,7 +7,7 @@ interface buttonProps extends TouchableOpacityProps  {
    texto : string
 }
 
-export function Button({texto, ...rest} : buttonProps){
+export default function Button({texto, ...rest} : buttonProps){
    return (
       <TouchableOpacity style={styles.container} {...rest}>
          <Text style={styles.textButton}>
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
       justifyContent:'center',
       alignItems:'center',
       borderRadius:16,      
+      width:'100%',
    },
    textButton:{
       color:colors.white,      
