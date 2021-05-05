@@ -27,8 +27,13 @@ export default function UserIdentification() {
       if(!userName)
          return Alert.alert('Me diz como chamar você 😢');
          
-      await AsyncStorage.setItem('@plantmanager:userName',userName);
-      navigation.navigate('Confirmation');
+      try{
+         await AsyncStorage.setItem('@plantmanager:userName',userName);
+         navigation.navigate('Confirmation');
+      }
+      catch{
+         return Alert.alert('Não foi possível salvar o seu nome 😢');
+      }
    }
 
    return (

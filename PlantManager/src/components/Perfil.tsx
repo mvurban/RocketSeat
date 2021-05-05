@@ -6,11 +6,10 @@ import colors from '../styles/colors';
 
 interface propsPerfil {
    texto1: string,
-   texto2: string,
-   avatar: string,
+   texto2: string,   
 }
 
-export default function Perfil({texto1, texto2, avatar}: propsPerfil) {
+export default function Perfil({texto1, texto2 }: propsPerfil) {
    return (
       <View style={styles.container}>
          <View>

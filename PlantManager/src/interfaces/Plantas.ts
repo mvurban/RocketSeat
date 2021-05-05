@@ -9,5 +9,6 @@ export default interface plantasProps {
    frequency: {
      times: number,
      repeat_every: string,
-   }
+   },
+   dateTimeNotification : Date,
 }

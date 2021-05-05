@@ -4,16 +4,16 @@ import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-n
 import { FlatList } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/core';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Perfil from '../components/Perfil'
 import fonts from '../styles/fonts'
 import colors from '../styles/colors'
 import api from '../services/api'
-import Perfil from '../components/Perfil'
+
 import ButtonAmbiente from '../components/ButtonAmbiente'
 import PlantCardPrimary from '../components/PlantCardPrimary'
 import Loading from '../components/Loading'
 import plantasProps from '../interfaces/Plantas'
 import ambientesProps from '../interfaces/Ambientes'
-
 
 export default function PlantSelect() {
 
@@ -80,7 +80,7 @@ export default function PlantSelect() {
       setPage(oldValue => oldValue + 1);
       feachPlants();
    }
-   function handlerPlantCard(plant:plantasProps)
+   function handlerPlantSelect(plant:plantasProps)
    {      
       navigation.navigate('PlantSave', {plant});
    }
@@ -105,7 +105,7 @@ export default function PlantSelect() {
 
    return (
       <SafeAreaView style={styles.container}>         
-         <Perfil texto1='Olá,' texto2={userName} avatar = ''></Perfil>
+         <Perfil texto1='Olá,' texto2={userName} ></Perfil>
          <View style={styles.containerTitulo}>
             <Text style={styles.titulo}>Em qual ambiente</Text>
             <Text style={styles.subTitulo}>você quer colocar sua planta?</Text>
@@ -131,7 +131,7 @@ export default function PlantSelect() {
                data={plantasFiltradas}
                keyExtractor = {(item)=>item.id}
                renderItem={({item}) => (
-                  <PlantCardPrimary data={item} onPress={()=>handlerPlantCard(item)} ></PlantCardPrimary>
+                  <PlantCardPrimary data={item} onPress={()=>handlerPlantSelect(item)} ></PlantCardPrimary>
                )}                 
                ref={flatListRef}               
                showsVerticalScrollIndicator = {false}

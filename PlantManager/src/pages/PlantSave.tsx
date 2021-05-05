@@ -2,14 +2,15 @@ import React, {useState} from 'react'
 import { View, Text, StyleSheet, Platform, Alert } from 'react-native'
 import {SvgFromUri} from  'react-native-svg'
 import {useRoute} from '@react-navigation/core'
+import { format, isBefore } from 'date-fns'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import plantasProps from '../interfaces/Plantas'
 import colors from '../styles/colors'
 import fonts from '../styles/fonts'
 import CardRegagem from '../components/CardRegagem';
 import Button from '../components/Button'
 import DateTimePicker, {Event} from '@react-native-community/datetimepicker';
-import { format, isBefore } from 'date-fns'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import {setPlanta, getPlantas} from '../storage/Plantas';
 
 interface Params {
    plant: plantasProps,
@@ -42,6 +43,19 @@ export default function PlantSave() {
    }
    function handlerOpenDatePickerAndroid(){
       setShowDatePicker(coco => !coco)
+   }
+   async function handlerCadastrarPlanta(){
+      const data  = await getPlantas(); 
+      console.log('data retornada',data)
+      return;
+
+      try{
+         console.log('Cadastrar Planta:',plant);         
+         await setPlanta({...plant, dateTimeNotification : selectedDateTime});
+      }
+      catch{
+         Alert.alert('Não foi possível gravar a planta, tente novamente mais tarde 😢')
+      }
    }
    
    return (
@@ -79,7 +93,7 @@ export default function PlantSave() {
                )
             }
          </View>
-            <Button texto='Cadastrar Planta' onPress={()=>{}}></Button>                 
+            <Button texto='Cadastrar Planta' onPress={()=>{handlerCadastrarPlanta()}}></Button>                 
          </View>
       </View>
    )
