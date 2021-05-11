@@ -11,7 +11,7 @@ import MyPlants from '../pages/MyPlants';
 const pages = createStackNavigator();
 
 const AppRoutes: React.FC = () =>(
-   <pages.Navigator headerMode="none" screenOptions={{cardStyle: {backgroundColor:colors.white}}}>
+   <pages.Navigator headerMode="none" initialRouteName="" screenOptions={{cardStyle: {backgroundColor:colors.white}}}>
       <pages.Screen name="Welcome" component={Welcome} />
       <pages.Screen name="UserIdentification" component={UserIdentification} /> 
       <pages.Screen name="Confirmation" component={Confirmation} />

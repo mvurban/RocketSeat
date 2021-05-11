@@ -6,6 +6,7 @@ import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import Button from '../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import iConfirmation from '../interfaces/Confirmacao';
 
 export default function UserIdentification() {
 
@@ -29,7 +30,14 @@ export default function UserIdentification() {
          
       try{
          await AsyncStorage.setItem('@plantmanager:userName',userName);
-         navigation.navigate('Confirmation');
+         navigation.navigate('Confirmation', {
+            title:'Prontinho',
+            subtitle:'Agora vamos começar a cuidar das suas plantinhas com muito cuidado.',
+            buttonTitle:'Continuar',
+            icon: 'smile',            
+            nextPage: 'PlantSelect',
+         }
+         );
       }
       catch{
          return Alert.alert('Não foi possível salvar o seu nome 😢');

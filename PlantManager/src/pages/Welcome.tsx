@@ -11,8 +11,7 @@ export default function Welcome() {
    const navigation = useNavigation();
 
    function handleNavigation(){
-      //navigation.navigate('UserIdentification')
-      navigation.navigate('MyPlants')
+      navigation.navigate('UserIdentification')     
    }
 
    return (

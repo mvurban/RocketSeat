@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
-import { View, Text, StyleSheet, Platform, Alert } from 'react-native'
+import {View, Text, StyleSheet, Platform, Alert } from 'react-native'
 import {SvgFromUri} from  'react-native-svg'
-import {useRoute} from '@react-navigation/core'
-import { format, isBefore } from 'date-fns'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import {useNavigation, useRoute} from '@react-navigation/core'
+import {format, isBefore } from 'date-fns'
+import {TouchableOpacity } from 'react-native-gesture-handler'
 import plantasProps from '../interfaces/Plantas'
 import colors from '../styles/colors'
 import fonts from '../styles/fonts'
@@ -20,9 +20,10 @@ export default function PlantSave() {
 
    const route = useRoute();
    const {plant}  = route.params as Params;
-
    const [selectedDateTime, setSelecedDateTime] = useState(new Date());
    const [showDatePicker, setShowDatePicker] = useState(Platform.OS == 'ios');
+   const navigation = useNavigation();
+
 
    function handlerChangeTime(event : Event, dateTime:Date | undefined){      
       setShowDatePicker(oldState => !oldState)
@@ -46,12 +47,19 @@ export default function PlantSave() {
    }
    async function handlerCadastrarPlanta(){
       const data  = await getPlantas(); 
-      console.log('data retornada',data)
-      return;
 
       try{
-         console.log('Cadastrar Planta:',plant);         
+               
          await setPlanta({...plant, dateTimeNotification : selectedDateTime});
+
+         navigation.navigate('Confirmation', {
+            title:'Tudo Certo',
+            subtitle:'Fique tranquilo que sempre vamos lembrar você de cuidar da sua plantinha com bastante amor.',
+            buttonTitle:'Muito obrigado :D',
+            icon: 'hug',            
+            nextPage: 'MyPlants',
+         })
+
       }
       catch{
          Alert.alert('Não foi possível gravar a planta, tente novamente mais tarde 😢')
