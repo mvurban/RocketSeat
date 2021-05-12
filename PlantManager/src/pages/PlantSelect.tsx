@@ -155,7 +155,8 @@ const styles = StyleSheet.create({
    container:{
       flex:1,
       paddingVertical:80,
-      paddingHorizontal:32,      
+      paddingHorizontal:32,     
+      backgroundColor:colors.white, 
    },
    containerTitulo:{
       marginTop:40,
@@ -177,8 +178,7 @@ const styles = StyleSheet.create({
       width:'100%',
    },
    containerPlantas:{
-      marginTop:40,
-      height:400,
-      
+      marginTop:40,      
+      marginBottom:165,
    },
 })

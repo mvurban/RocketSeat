@@ -57,7 +57,7 @@ export default function PlantSave() {
             subtitle:'Fique tranquilo que sempre vamos lembrar você de cuidar da sua plantinha com bastante amor.',
             buttonTitle:'Muito obrigado :D',
             icon: 'hug',            
-            nextPage: 'MyPlants',
+            nextPage: 'tabRoutes',
          })
 
       }

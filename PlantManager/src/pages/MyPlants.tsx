@@ -63,21 +63,17 @@ export default function MyPlants() {
             <Perfil texto1='Minhas' texto2='Plantinhas'></Perfil>
          </View>
          <CardRegagem dica={regagem || ''}></CardRegagem>
-         <Text style={styles.tituloPlantas}>Próximas regadas</Text>         
-         <FlatList                
-               data={myPlants} 
-               keyExtractor = {(item)=>item.id}
-               renderItem={({item}) => (
-                  <PlantCardSecundary data={item}></PlantCardSecundary>                  
-                  //    titulo={item.title} 
-                  //    ativo={item.key == ambienteSelecionado}  
-                  //    onPress={()=>{handlerAmbienteSelecionado(item.key)}} 
-                  // />
-               )}               
-               showsVerticalScrollIndicator = {false}
-               contentContainerStyle={{flex:1}}
-            ></FlatList>    
-
+         <Text style={styles.tituloPlantas}>Próximas regadas</Text>     
+         <View style={styles.containerPlantas}>
+            <FlatList                
+                  data={myPlants} 
+                  keyExtractor = {(item)=>item.id}
+                  renderItem={({item}) => (
+                     <PlantCardSecundary data={item}></PlantCardSecundary>                  
+                  )}               
+                  showsVerticalScrollIndicator = {false}               
+               ></FlatList>    
+            </View>    
       </View>
    )
 }
@@ -87,6 +83,7 @@ const styles = StyleSheet.create({
       flex:1,
       paddingHorizontal:32,
       paddingVertical:50,
+      backgroundColor:colors.white,
    },
    containerPerfil:{
       marginBottom:40,
@@ -97,5 +94,8 @@ const styles = StyleSheet.create({
       fontSize:24,      
       marginTop:40,
       marginBottom:16,
+   },
+   containerPlantas:{            
+      marginBottom:265,      
    },
 })

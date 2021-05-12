@@ -35,7 +35,7 @@ export default function UserIdentification() {
             subtitle:'Agora vamos começar a cuidar das suas plantinhas com muito cuidado.',
             buttonTitle:'Continuar',
             icon: 'smile',            
-            nextPage: 'PlantSelect',
+            nextPage: 'tabRoutes',
          }
          );
       }
