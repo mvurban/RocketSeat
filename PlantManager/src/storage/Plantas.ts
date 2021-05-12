@@ -10,6 +10,7 @@ interface storagePlantasProps {
 
 export async function setPlanta(planta:plantasProps) : Promise<void> {
    try{
+      
       const data = await AsyncStorage.getItem('@plantmanager:plantas')
       const oldPlants = data ? (JSON.parse(data) as storagePlantasProps) : {};
       const newPlant = {
@@ -17,10 +18,11 @@ export async function setPlanta(planta:plantasProps) : Promise<void> {
             data:planta
          }
       }
+     
       await AsyncStorage.setItem('@plantmanager:plantas', 
          JSON.stringify({
+            ...oldPlants,
             ...newPlant,
-            ...oldPlants
          })
       )
    }

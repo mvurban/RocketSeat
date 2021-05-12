@@ -4,15 +4,9 @@ import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import {SvgFromUri} from 'react-native-svg';
+import iPlantCard from '../interfaces/PlantCard';
 
-interface PlantCardProps extends RectButtonProps {
-   data: {
-      name:string,
-      photo:string
-   }
-}
-
-export default function PlantCardPrimary({data, ...rest} : PlantCardProps) {
+export default function PlantCardPrimary({data, ...rest} : iPlantCard) {
    return (
       <View>
          <RectButton style={styles.container} {...rest}>
@@ -22,7 +16,6 @@ export default function PlantCardPrimary({data, ...rest} : PlantCardProps) {
       </View>
    )
 }
-
 
 const styles = StyleSheet.create({
    container:{

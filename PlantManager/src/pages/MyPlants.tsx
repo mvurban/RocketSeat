@@ -7,17 +7,18 @@ import colors from '../styles/colors'
 import fonts from '../styles/fonts'
 import {getPlantas} from '../storage/Plantas'
 import iPlantas from '../interfaces/Plantas'
+import iPlantCard from '../interfaces/PlantCard'
 import Loading from '../components/Loading'
 import { formatDistance } from 'date-fns'
 import { pt } from 'date-fns/locale'
-
-
+import PlantCardSecundary from '../components/PlantCardSecundary'
 
 export default function MyPlants() {
 
    const [myPlants, setMyPlants] = useState<iPlantas[]>();
    const [loading, setLoading] = useState(true);
    const [regagem, setRegagem] = useState<string>('');
+   const [plantCard, setPlantCard] = useState<iPlantCard>();
 
    useEffect(() => {
       async function loadingPlants() {
@@ -30,6 +31,8 @@ export default function MyPlants() {
                new Date().getTime(), { locale:pt}
                )
             setRegagem(`Regue sua ${myPlantas[0].name} daqui a ${time}`);
+            
+
 
             if(!myPlantas)
             {
@@ -42,9 +45,7 @@ export default function MyPlants() {
             Alert.alert('Atenção', `Não foi possível recuperar suas plantas: ${e.message}`);
             setMyPlants([]);
             return
-         }
-         
-
+         } 
       }     
       loadingPlants(); 
       setLoading(false)
@@ -55,7 +56,6 @@ export default function MyPlants() {
          return (<Loading></Loading>)
       }
    }
-
 
    return (
       <View style={styles.container}>
@@ -68,7 +68,7 @@ export default function MyPlants() {
                data={myPlants} 
                keyExtractor = {(item)=>item.id}
                renderItem={({item}) => (
-                  <Text>{item.name}</Text>
+                  <PlantCardSecundary data={item}></PlantCardSecundary>                  
                   //    titulo={item.title} 
                   //    ativo={item.key == ambienteSelecionado}  
                   //    onPress={()=>{handlerAmbienteSelecionado(item.key)}} 
