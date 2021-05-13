@@ -5,56 +5,83 @@ import CardRegagem from '../components/CardRegagem'
 import { FlatList } from 'react-native-gesture-handler'
 import colors from '../styles/colors'
 import fonts from '../styles/fonts'
-import {getPlantas} from '../storage/Plantas'
+import {getPlantas, delPlantas} from '../storage/Plantas'
 import iPlantas from '../interfaces/Plantas'
-import iPlantCard from '../interfaces/PlantCard'
 import Loading from '../components/Loading'
 import { formatDistance } from 'date-fns'
 import { pt } from 'date-fns/locale'
 import PlantCardSecundary from '../components/PlantCardSecundary'
+
 
 export default function MyPlants() {
 
    const [myPlants, setMyPlants] = useState<iPlantas[]>();
    const [loading, setLoading] = useState(true);
    const [regagem, setRegagem] = useState<string>('');
-   const [plantCard, setPlantCard] = useState<iPlantCard>();
+   
+   function handleRemover(planta : iPlantas){
+      Alert.alert('Remover',`Deseja remover a planta ${planta.name}?`,[
+         {
+            text:'Sim',
+            onPress: async() =>
+             {
+                delPlantas(planta.id)        
+                
+                setMyPlants((oldData) => oldData?.filter((item) => item.id != planta.id));
 
-   useEffect(() => {
-      async function loadingPlants() {
-         try{
-            setLoading(true);
-            const myPlantas = await getPlantas();          
+                ////Não funciona pq tenho o useEfect não funciona de forma automática. setMyPlants(myPlantas);                
+                //await loadingPlants();
+            }
+         },         
+         {
+            text: 'Não ',
+            style: 'cancel'
+         },
 
+      ])
+   }
+
+   function temPlantas(myPlants : iPlantas[]) : boolean {      
+      return myPlants.length > 0
+   }
+
+   async function loadingPlants() {
+      try{
+
+         setLoading(true);
+         const myPlantas = await getPlantas();          
+         
+         if(myPlantas && temPlantas(myPlantas))
+         {
             const time = formatDistance(
                new Date(myPlantas[0].dateTimeNotification).getTime(),
-               new Date().getTime(), { locale:pt}
+               new Date().getTime(), { locale:pt} 
                )
-            setRegagem(`Regue sua ${myPlantas[0].name} daqui a ${time}`);
             
-
-
-            if(!myPlantas)
-            {
-               Alert.alert('Atenção', 'Você ainda não tem plantas cadastradas.');
-               return
-            }
+            setRegagem(`Regue sua ${myPlantas[0].name} daqui a ${time}`);
             setMyPlants(myPlantas);
          }
-         catch (e) {
-            Alert.alert('Atenção', `Não foi possível recuperar suas plantas: ${e.message}`);
-            setMyPlants([]);
+         else{
+            Alert.alert('Atenção', 'Você ainda não tem plantas cadastradas.');
             return
-         } 
-      }     
-      loadingPlants(); 
+         }
+      }
+      catch (e) {
+         Alert.alert('Atenção', `Não foi possível recuperar suas plantas: ${e.message}`);
+         setMyPlants([]);
+         return
+      } 
+     finally{
       setLoading(false)
+     }
+   } 
+
+   useEffect(() => {  
+      loadingPlants(); 
    }, [])
 
-   {
-      if(loading){
-         return (<Loading></Loading>)
-      }
+   if(loading){
+      return (<Loading></Loading>)
    }
 
    return (
@@ -67,9 +94,9 @@ export default function MyPlants() {
          <View style={styles.containerPlantas}>
             <FlatList                
                   data={myPlants} 
-                  keyExtractor = {(item)=>item.id}
+                  keyExtractor = {(item)=>item.id.toString()}
                   renderItem={({item}) => (
-                     <PlantCardSecundary data={item}></PlantCardSecundary>                  
+                     <PlantCardSecundary handleRemover={()=>handleRemover(item)} data={item}></PlantCardSecundary>                  
                   )}               
                   showsVerticalScrollIndicator = {false}               
                ></FlatList>    

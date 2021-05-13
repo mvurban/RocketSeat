@@ -5,5 +5,6 @@ export default interface PlantCardProps extends RectButtonProps {
       name:string,
       photo:string,
       hour:string,
-   }
+   };
+   handleRemover: () => void;
 }

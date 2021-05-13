@@ -128,7 +128,7 @@ export default function PlantSelect() {
          <View style={styles.containerPlantas}>
             <FlatList                
                data={plantasFiltradas}
-               keyExtractor = {(item)=>item.id}
+               keyExtractor = {(item)=>item.id.toString()}
                renderItem={({item}) => (
                   <PlantCardPrimary data={item} onPress={()=>handlerPlantSelect(item)} ></PlantCardPrimary>
                )}                 

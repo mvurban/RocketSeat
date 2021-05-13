@@ -1,30 +1,27 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { format } from 'date-fns';
-import plantasProps from '../interfaces/Plantas';
+import iplantas from '../interfaces/Plantas';
 
 interface storagePlantasProps {
    [id:string]:{
-      data: plantasProps,
+      data: iplantas,
    }
 }
 
-export async function setPlanta(planta:plantasProps) : Promise<void> {
+
+export async function addPlanta(planta:iplantas) : Promise<void> {
    try{
       
-      const data = await AsyncStorage.getItem('@plantmanager:plantas')
-      const oldPlants = data ? (JSON.parse(data) as storagePlantasProps) : {};
+      const oldPlants = await getPlantasToStorage();
+
       const newPlant = {
          [planta.id] : {
             data:planta
          }
       }
-     
-      await AsyncStorage.setItem('@plantmanager:plantas', 
-         JSON.stringify({
-            ...oldPlants,
-            ...newPlant,
-         })
-      )
+           
+      addPlantasToStorage({...oldPlants, ...newPlant})
+
    }
    catch(error){
       throw new Error(error);
@@ -32,11 +29,9 @@ export async function setPlanta(planta:plantasProps) : Promise<void> {
    
 }
 
-export async function getPlantas() : Promise<plantasProps[]> {
-   try{
-      
-      const data = await AsyncStorage.getItem('@plantmanager:plantas')
-      const Plantas = data ? (JSON.parse(data) as storagePlantasProps) : {};
+export async function getPlantas() : Promise<iplantas[]> {
+   try{            
+      const Plantas = await getPlantasToStorage();
       return sortPlantas(Plantas);
    }
    catch(error){
@@ -45,7 +40,41 @@ export async function getPlantas() : Promise<plantasProps[]> {
    
 }
 
-function sortPlantas(plantas : storagePlantasProps) : plantasProps[]
+export async function delPlantas(id:string) {
+   try{
+      const Plantas = await getPlantasToStorage();
+      delete Plantas[id];
+      addPlantasToStorage(Plantas)      
+   }
+   catch(e){
+      throw e;
+   }
+}
+
+async function addPlantasToStorage(plantas:storagePlantasProps) {
+   try{
+
+   await AsyncStorage.setItem('@plantmanager:plantas', 
+         JSON.stringify(plantas)
+      )
+   }
+   catch(e){
+      throw new Error(e);
+   }
+}
+async function getPlantasToStorage() :  Promise<storagePlantasProps>{
+
+   try{
+      const data = await AsyncStorage.getItem('@plantmanager:plantas')
+      const Plants = data ? (JSON.parse(data) as storagePlantasProps) : {};
+      return Plants 
+   }
+   catch(e){
+      throw new Error(e);
+   }
+   
+}
+function sortPlantas(plantas : storagePlantasProps) : iplantas[]
 {
    const PlantasMap = Object
    .keys(plantas)
@@ -54,6 +83,7 @@ function sortPlantas(plantas : storagePlantasProps) : plantasProps[]
          ...plantas[plant].data, hour: format(new Date(plantas[plant].data.dateTimeNotification), 'HH:mm')
       }
    })
+
    const PlantasSorted = PlantasMap
    .sort((a, b) => 
       Math.floor(new Date(a.dateTimeNotification).getTime() /1000 - 
