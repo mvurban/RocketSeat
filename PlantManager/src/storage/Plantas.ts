@@ -1,10 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { format } from 'date-fns';
 import iplantas from '../interfaces/Plantas';
+import {NotificationWaterPlant, CancelNotificationWaterPlant} from './Notifications';
 
 interface storagePlantasProps {
    [id:string]:{
-      data: iplantas,
+      data: iplantas;
+      idNotification : string;
    }
 }
 
@@ -12,11 +14,13 @@ interface storagePlantasProps {
 export async function addPlanta(planta:iplantas) : Promise<void> {
    try{
       
-      const oldPlants = await getPlantasToStorage();
+      const idNotification  = await NotificationWaterPlant(planta);
 
+      const oldPlants = await getPlantasToStorage();
       const newPlant = {
          [planta.id] : {
-            data:planta
+            data:planta,
+            idNotification
          }
       }
            
@@ -43,6 +47,9 @@ export async function getPlantas() : Promise<iplantas[]> {
 export async function delPlantas(id:string) {
    try{
       const Plantas = await getPlantasToStorage();
+
+      await CancelNotificationWaterPlant(Plantas[id].idNotification);
+
       delete Plantas[id];
       addPlantasToStorage(Plantas)      
    }
