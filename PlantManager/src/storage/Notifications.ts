@@ -13,9 +13,9 @@ export async function NotificationWaterPlant(plant : iPlantas) : Promise<string>
          const interval = Math.trunc(7 / times)
          nextTime.setDate(now.getDate() + interval)
       }
-      // else{
-      //    nextTime.setDate(nextTime.getDate() + 1)
-      // }
+       else{
+          nextTime.setDate(nextTime.getDate() + 1)
+      }
 
       const seconds = Math.abs(Math.ceil((now.getTime() - nextTime.getTime()) / 1000))
       const notificationId = await Notifications.scheduleNotificationAsync({
@@ -43,6 +43,11 @@ export async function NotificationWaterPlant(plant : iPlantas) : Promise<string>
 
 export async function CancelNotificationWaterPlant(IdNotification : string)  {
 
-   await Notifications.cancelScheduledNotificationAsync(IdNotification);
-
+   try{
+      if(IdNotification && IdNotification.length > 0)
+         await Notifications.cancelScheduledNotificationAsync(IdNotification);
+   }
+   catch(e){
+      throw new Error(e);
+   }
 }

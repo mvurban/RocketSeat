@@ -27,9 +27,6 @@ export default function MyPlants() {
              {
                 delPlantas(planta.id)        
                 setMyPlants((oldData) => oldData?.filter((item) => item.id != planta.id));
-
-                ////Não funciona pq tenho o useEfect não funciona de forma automática. setMyPlants(myPlantas);                
-                //await loadingPlants();
             }
          },         
          {
