@@ -45,6 +45,7 @@ export async function CancelNotificationWaterPlant(IdNotification : string)  {
 
    try{
       if(IdNotification && IdNotification.length > 0)
+         //await Notifications.cancelAllScheduledNotificationsAsync();
          await Notifications.cancelScheduledNotificationAsync(IdNotification);
    }
    catch(e){
