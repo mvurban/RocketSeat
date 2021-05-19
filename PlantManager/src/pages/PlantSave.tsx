@@ -46,7 +46,7 @@ export default function PlantSave() {
       setShowDatePicker(coco => !coco)
    }
    async function handlerCadastrarPlanta() {
-      const data = await getPlantas();
+      //const data = await getPlantas();
 
       try {
 
